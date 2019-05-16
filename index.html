@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ajax example</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <!-- Código para obtener un XML desde el servidor -->
+    <script type="text/javascript" src="js/resXML.js"></script>
+    <!-- Código para obtener un JSON desde el servidor -->
+    <script type="text/javascript" src="js/resJSON.js"></script>
+    <style>
+        .btn {
+            margin-bottom: 10px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        window.onload = init;
+        var peticionHttp = null;
+        var parser = null;
+
+        function init() {
+            parser = new DOMParser();
+            peticionHttp = new XMLHttpRequest();
+        }
+
+        function parseXML(plainXML) {
+            return parser.parseFromString(plainXML, "text/xml");
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row"></div>
+        <h1>Ajax Buddy</h1>
+        <form>
+            <div class="row">
+                <div class="col-12">
+                    <h2>URL Base</h2>
+                    <div class="form-group" style="margin-bottom:0px">
+                        <label for="selectedRadioButton" class="control-label">Seleccione como desea componer la url de la petición:</label>
+                        <div class="input-group">
+                            <div class="btn-group radioBtn" id="urlCompositorRadio">
+                                <a class="btn btn-primary btn-sm active" data-toggle="selectedRadioButton" data-title="M">Maquinas</a>
+                                <a class="btn btn-primary btn-sm notActive" data-toggle="selectedRadioButton" data-title="U">Custom URL</a>
+                            </div>
+                            <input type="hidden" name="selectedRadioButton" id="selectedRadioButton">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row urlBaseCompositor">
+                <div class="col-12">
+                    <div class="form-group form-inline">
+                        <label for="protocol">Introduzca el protocolo:</label>
+                        <input type="text" class="form-control col-1" style="margin-left:15px" id="protocol" value="https" placeholder="http/https">
+                    </div>
+                    <div class="form-group" id="maquinasCompositor">
+                        <label for="urlBase">Maquinas:</label>
+                        <textarea type="text" class="form-control" id="urlBase" placeholder="Enter the domain names (port included)"></textarea>
+                        <small id="maquinasHelp" class="form-text text-muted">El formato debe ser: maquina1:0000;maquina2:0000;maquina3:0000;...</small>
+                    </div>
+                </div>
+            </div>
+            <div class="row urlBaseCompositor" id="plainBaseCompositor" style="display:none">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="baseURL">Introduzca la url base</label>
+                        <input type="text" class="form-control" id="baseURL" placeholder="Enter the main URL">
+                        <small id="urlHelp" class="form-text text-muted">https://example-site.com<span style="color:red;font-weight: bold">/</span></small>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h2>Method</h2>
+                    <div class="form-group">
+                        <label for="selectedMethod" class="control-label">Seleccione el method de la petición:</label>
+                        <div class="input-group">
+                            <div id="method" class="btn-group radioBtn">
+                                <a class="btn btn-primary btn-sm active" data-toggle="selectedMethod" data-title="GET">GET</a>
+                                <a class="btn btn-primary btn-sm notActive" data-toggle="selectedMethod" data-title="POST">POST</a>
+                                <a class="btn btn-primary btn-sm notActive" data-toggle="selectedMethod" data-title="PUT">PUT</a>
+                                <a class="btn btn-primary btn-sm notActive" data-toggle="selectedMethod" data-title="DELETE">DELETE</a>
+                            </div>
+                            <input type="hidden" name="selectedMethod" id="selectedMethod">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-12">
+                    <h2>Context</h2>
+                    <div class="form-group">
+                        <label for="context">Introduzca el contexto de la URL</label>
+                        <input type="text" class="form-control" id="context" placeholder="Enter URL context">
+                        <small id="urlHelp" class="form-text text-muted">Por ejemplo servicio/v1/param/whatever...</small>
+                    </div>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-12">
+                    <h2>Query parameters</h2>
+                    <div class="form-group">
+                        <label for="queryparams">Introduzca los parametros que van a ir por la url</label>
+                        <input type="text" class="form-control" id="queryparams" placeholder="Ejemplo ?clave=valor&clave=valor&etc...">
+                        <small id="urlHelp" class="form-text text-muted">Por ejemplo ?clave=valor&clave=valor</small>
+                    </div>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-12">
+                    <h2>Headers</h2>
+                    <div class="form-group">
+                        <textarea type="text" class="form-control" id="headers" placeholder="Enter the headers separated by break line"></textarea>
+                        <small id="maquinasHelp" class="form-text text-muted">El formato debe ser: <br>
+                            "headerkey1":"headervalue1"<br>
+                            "headerkey2":"headervalue2"<br>
+                            "headerkey3":"headervalue3"<br>
+                            "headerkey4":"headervalue4"
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-12">
+                    <h2>Body</h2>
+                    <div class="form-group">
+                        <textarea type="text" class="form-control" id="body" placeholder="Enter the body of the request"></textarea>
+                        <small id="bodyHelp" class="form-text text-muted">El formato debe ser: <br> {....} <br>  <textarea style="border:none; resize: none; height: 20px;overflow: hidden"><bla>...</bla></textarea> <br> a=b&u=o&c=y <br> plain text</small>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary">Enviar Peticion</button>
+        </form>
+    </div>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/radios.js"></script>
+</body>
+
+</html>

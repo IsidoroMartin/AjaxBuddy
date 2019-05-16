@@ -1,0 +1,19 @@
+[
+    { "edad":24,
+        "peso":45,
+        "nombre":"Alex",
+        "apellido1":"Paravisini"
+    },
+    { "edad":40,
+        "peso":75,
+        "nombre":"Llorenc",
+        "apellido1":"Gimenez",
+        "apellido2":"Rodriguez"
+    },
+    { "edad":21,
+        "peso":55,
+        "nombre":"Diego",
+        "apellido1":"Fernandez",
+        "apellido":"Paton"
+    }
+]

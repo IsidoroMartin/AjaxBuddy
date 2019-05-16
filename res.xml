@@ -1,0 +1,16 @@
+<personas>
+    <persona edad="24" peso="45">
+        <nombre>Alex</nombre>
+        <apellido1>Paravisini</apellido1>
+    </persona>
+    <persona edad="40" peso="75">
+        <nombre>Llorenc</nombre>
+        <apellido1>Gimenez</apellido1>
+        <apellido2>Rodriguez<apellido2>
+    </persona>
+    <persona edad="21" peso="55">
+        <nombre>Diego</nombre>
+        <apellido1>Fernandez</apellido1>
+        <apellido2>Paton<apellido2>
+    </persona>
+</personas>
